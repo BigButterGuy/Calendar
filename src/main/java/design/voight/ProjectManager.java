@@ -8,6 +8,7 @@ public class ProjectManager {
 
     public void addProject() {
         //TODO use UI to make date setting more seamless.
+        //TODO Seperate UI from project bits.
         System.out.println("Name: ");
         Scanner in = new Scanner(System.in);
         String name = in.nextLine();
