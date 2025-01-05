@@ -78,7 +78,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!-- javafx plugin -->
+            <!-- javafx plugin TODO check hellofx mainclass-->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
