@@ -4,8 +4,9 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ProjectManager {
+    //new section to store multiple projects into a list
 
-
+// OBSOLETE
     public void addProject() {
         //TODO use UI to make date setting more seamless.
         System.out.println("Name: ");
