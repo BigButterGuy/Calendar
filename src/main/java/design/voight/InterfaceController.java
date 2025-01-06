@@ -36,7 +36,7 @@ public class InterfaceController {
         popupStage.showAndWait();// Wait for popup to resolve
 
         System.out.println("New Project \"" + controller.getName() + "\" created.");
-        newProjectLabel.setText("");
+        newProjectLabel.setText(" ");
 
     }
 }
