@@ -2,24 +2,42 @@ package design.voight;
 
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 
 public class InterfaceController {
 
+    @FXML
+    private Label newProjectLabel;
 
     @FXML
-    private Label quitLabel;
+    public void onNewProjectButtonClick() {
+        newProjectLabel.setText("Creating New Project");
+        System.out.println("Attempt Create New Project");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/design.voight/projectPopUp.fxml"));
+            Parent root = loader.load();
+            // Create new stage
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Create New Project");
+            popupStage.setScene(new Scene(root));
 
-    @FXML
-    private TextField TextField_InputBox;
+            // Get controller and set stage reference
+            ProjectPopupController controller = loader.getController();
+            controller.setStage(popupStage);
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.showAndWait();// Wait for popup to resolve
 
-    String inputText;
-
-    @FXML
-    public void onQuitButtonClick() {
-        quitLabel.setText("saving info");
-        inputText = TextField_InputBox.getText();
-        System.out.println(inputText);
-        //TODO extend project system into the UI, fully functioning export of entered data.
+            System.out.println("New Project \"" + controller.getName() + "\" created." );
+            newProjectLabel.setText("");
+        }
+        catch (Exception e) {
+            System.out.println("Error in Creating New Project" + e);
+        }
     }
 }
