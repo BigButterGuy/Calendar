@@ -1,28 +1,42 @@
 package design.voight;
 
-import java.time.LocalDate;
-import java.util.Scanner;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectManager {
-    //new section to store multiple projects into a list
+    private static final String FILE_PATH = "projects.ser";
 
-// OBSOLETE
-    public void addProject() {
-        //TODO use UI to make date setting more seamless.
-        System.out.println("Name: ");
-        Scanner in = new Scanner(System.in);
-        String name = in.nextLine();
-        System.out.println("Description: ");
-        String description = in.nextLine();
-        System.out.println("Start Date (year-mm-dd): ");
-        LocalDate startDate = LocalDate.parse(in.nextLine());
-        System.out.println("End Date (year-mm-dd): ");
-        LocalDate endDate = LocalDate.parse(in.nextLine());
-        Project a = new Project(name, startDate, endDate, description);
-        printProj(a);
+
+    public static void save(List<Project> projects) {// Need catch or no work
+        List<Project> existingProjects = loadProjects();
+        existingProjects.addAll(projects);
+
+        // Open new file stream, then write to it.
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+            out.writeObject(projects);
+            System.out.println("Saved " + projects.size() + " projects"); // Remove later
+        } catch (IOException e) {
+            System.exit(0);
+        }
+        printProjects(existingProjects);
     }
-    public void printProj(Project project) { //remove//TODO use maven test on this
-        System.out.println(project.getName());
-        System.out.println(project.getStartDate());
+    @SuppressWarnings("unchecked")
+    public static List<Project> loadProjects() {
+        File file = new File(FILE_PATH);
+        if (!file.exists() || file.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+            return (List<Project>) in.readObject(); // will always be a list
+        } catch (IOException | ClassNotFoundException e) {
+            System.exit(1);
+        }
+        return new ArrayList<Project>();
+
+    }
+    public static void printProjects(List<Project> existingProjects) {
+        System.out.println(existingProjects);
     }
 }

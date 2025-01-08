@@ -1,8 +1,13 @@
 package design.voight;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Project {
+public class Project implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     // Contains info for individual tracked projects
     private String name = "No Name";
     private LocalDate startDate;
@@ -11,20 +16,14 @@ public class Project {
     private double progress = 0.0;
 
 
+
     public Project(String name, LocalDate startDate, LocalDate endDate, String description) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-
-        //temporary check
-//        System.out.println(getName());
-//        System.out.println(getStartDate());
-//        System.out.println(getEndDate());
-//        System.out.println(getDescription());
-//        System.out.println(getProgress());
-        //TODO pass new project to project manager storage
     }
+
     // Set/Get
     public String getName() {
         return name;
@@ -44,4 +43,6 @@ public class Project {
     public void setProgress(double newProgress) {
         progress = newProgress;
     }
+
+
 }
