@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Application {
     @Override
@@ -18,7 +20,9 @@ public class Main extends Application {
         stage.show();
     }
     public static void main(String[] args) {
+
         launch();
+
     }
 }
 
