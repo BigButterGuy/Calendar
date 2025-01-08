@@ -4,4 +4,6 @@ module design.voight {
 
     opens design.voight to javafx.fxml;
     exports design.voight;
+    exports design.voight.Exceptions;
+    opens design.voight.Exceptions to javafx.fxml;
 }

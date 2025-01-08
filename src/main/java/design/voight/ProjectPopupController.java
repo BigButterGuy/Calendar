@@ -1,12 +1,13 @@
 package design.voight;
 
+import design.voight.Exceptions.ProjectException;
+import design.voight.Exceptions.ProjectFileException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ProjectPopupController {
@@ -32,7 +33,7 @@ public class ProjectPopupController {
         this.stage = stage;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -44,21 +45,31 @@ public class ProjectPopupController {
         String description = descriptionField.getText();
 
         // Create the Project object
-        Project projectName = new Project(name, startDate, endDate, description);
+        try {
+            Project theProject = new Project(name, startDate, endDate, description);
+            // Close the stage (popup)
+            stage.close();
 
-        // Close the stage (popup)
-        stage.close();
+            // Create a mutable list and add the project
+            List<Project> projectsToSave = new ArrayList<>();
+            projectsToSave.add(theProject);
 
-        // Create a mutable list and add the project
-        List<Project> projectsToSave = new ArrayList<>();
-        projectsToSave.add(projectName);
-
-        // Save the project in a background thread
-        new Thread(() -> {
-            // Pass the mutable list to save
-            ProjectManager.save(projectsToSave);
-        }).start();
+            // Save the project in a background thread
+            new Thread(() -> {
+                // Pass the mutable list to save
+                try {
+                    ProjectManager.save(projectsToSave);
+                } catch (ProjectFileException e) {
+                    // TODO: Replace this with UI dialog.
+                    System.err.println("The loaded file did not contain Projects or could not be found.");
+                }
+            }).start();
+        } catch (ProjectException e) {
+            // TODO: Replace this with UI dialog.
+            System.err.println("There was a problem with your project: " + e.getMessage());
+        }
     }
+
     @FXML
     private void onCancel() {
         stage.close();
