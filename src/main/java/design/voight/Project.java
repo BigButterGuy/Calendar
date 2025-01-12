@@ -25,7 +25,7 @@ public class Project implements Serializable {
         setStartDate(startDate);
         setEndDate(endDate);
         setDescription(description);
-        if(endDate.isAfter(startDate)){
+        if(startDate.isAfter(endDate)){
             throw new ProjectException("Start Date must be before End Date.");
         }
     }
@@ -42,6 +42,7 @@ public class Project implements Serializable {
     private void setStartDate(LocalDate startDate) throws ProjectException {
         if(null==startDate){
             throw new ProjectException("Start Date cannot be null.");
+            // Could be startDate = LocalDate.now()
         }
         this.startDate = startDate;
     }
@@ -54,7 +55,7 @@ public class Project implements Serializable {
     }
 
     public void setDescription(String description) throws ProjectException {
-        if("".equals(name)||null==name){
+        if("".equals(name)||null==name){ // maybe change
             throw new ProjectException("Description cannot be empty or null.");
         }
         this.description = description;
