@@ -16,13 +16,13 @@ public class ProjectManager {
 
         // Open new file stream, then write to it.
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
-            out.writeObject(projects);
-            System.out.println("Saved " + projects.size() + " projects"); // Remove later
+            out.writeObject(existingProjects);
+            System.out.println("Saved " + existingProjects.size() + " projects"); // Remove later
         } catch (IOException e){
             throw new ProjectFileException(e.getMessage());
         }
 
-        printProjects(existingProjects);
+        printProjects(existingProjects);//TODO remove eventually after testing/Make call to FXML for project display
     }
 
     @SuppressWarnings("unchecked")
@@ -40,6 +40,18 @@ public class ProjectManager {
     }
 
     public static void printProjects(List<Project> existingProjects) {
-        System.out.println(existingProjects);
+        System.out.println(existingProjects);//TODO print out names of each project iteratively
+
+        for (Project project : existingProjects) {
+            System.out.println(project.getName());
+            System.out.println(project.getDescription());
+            System.out.println(project.getStartDate());
+        }
     }
+    //TODO delete projects
+    /*public static void deleteProjects(List<Project> existingProjects) {
+        for (Project project : existingProjects) {}
+    }*/
+
+    //TODO return individual project. iterate through, looking for matching .name, return pointer to project specific
 }
