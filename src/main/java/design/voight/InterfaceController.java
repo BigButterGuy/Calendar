@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -16,6 +17,21 @@ public class InterfaceController {
 
     @FXML
     private Label newProjectLabel;
+
+    @FXML
+    private AnchorPane ganttPane;
+
+    public void initialize() {
+        try {
+            FXMLLoader ganttLoader = new FXMLLoader(getClass().getResource("/design.voight/ganttChart.fxml"));
+            AnchorPane ganttChart = ganttLoader.load();
+            ganttPane.getChildren().add(ganttChart); // Add Gantt Chart inside the designated pane
+            AnchorPane.setTopAnchor(ganttChart, 0.0);
+            AnchorPane.setLeftAnchor(ganttChart, 0.0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     public void onNewProjectButtonClick() throws IOException {
@@ -37,6 +53,8 @@ public class InterfaceController {
 
         //System.out.println("New Project \"" + controller.getName() + "\" created.");
         newProjectLabel.setText(" ");
+        //TODO Unload and reload gantt
 
     }
+
 }
