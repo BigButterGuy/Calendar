@@ -10,15 +10,12 @@ public class Project implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-
     // Contains info for individual tracked projects
     private String name = "No Name";
     private LocalDate startDate;
     private LocalDate endDate;
     private String description = "No Description.";
     private double progress = 0.0;
-
-
 
     public Project(String name, LocalDate startDate, LocalDate endDate, String description) throws ProjectException {
         setName(name);
