@@ -1,6 +1,7 @@
 package design.voight;
 
 
+import design.voight.Exceptions.ProjectFileException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 
 public class InterfaceController {
-
+    ProjectManager pm;
     @FXML
     private Label newProjectLabel;
 
@@ -28,8 +29,10 @@ public class InterfaceController {
             ganttPane.getChildren().add(ganttChart); // Add Gantt Chart inside the designated pane
             AnchorPane.setTopAnchor(ganttChart, 0.0);
             AnchorPane.setLeftAnchor(ganttChart, 0.0);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            pm=new ProjectManager();
+        } catch (IOException | ProjectFileException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -47,6 +50,7 @@ public class InterfaceController {
 
         // Get controller and set stage reference
         ProjectPopupController controller = loader.getController();
+        controller.setProgramManager(pm);
         controller.setStage(popupStage);
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.showAndWait();// Wait for popup to resolve
