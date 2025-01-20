@@ -17,12 +17,10 @@ public class ProjectManager {
         // Open new file stream, then write to it.
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             out.writeObject(existingProjects);
-            System.out.println("Saved " + existingProjects.size() + " projects"); // Remove later
         } catch (IOException e){
             throw new ProjectFileException(e.getMessage());
         }
-
-        printProjects(existingProjects);//TODO remove eventually after testing/Make call to FXML for project display
+        GanttChartController.onProjectListChanged();
     }
 
     @SuppressWarnings("unchecked")
