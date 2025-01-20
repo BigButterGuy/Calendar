@@ -7,37 +7,67 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectManager {
-    private static final String FILE_PATH = "projects.ser";
+    private List<Project> existingProjects = new ArrayList<>();
+    private File projectFile;
 
+    public ProjectManager() throws ProjectFileException {
+        this("projects.ser");
+    }
 
-    public static void save(List<Project> projects) throws ProjectFileException {// Need catch or no work
-        List<Project> existingProjects = loadProjects();
-        existingProjects.addAll(projects);
-
-        // Open new file stream, then write to it.
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
-            out.writeObject(existingProjects);
-        } catch (IOException e){
+    public ProjectManager(String filePath) throws ProjectFileException {
+        try {
+            System.out.println("Program Manager constructor.");
+            projectFile = new File(filePath);
+            existingProjects = load();
+        } catch (ProjectFileException e) {
+            System.err.println("* * * * * * ");
             throw new ProjectFileException(e.getMessage());
         }
+    }
+
+    public int save() throws ProjectFileException {// Need catch or no work
+        // Open new file stream, then write to it.
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(projectFile));
+            out.writeObject(existingProjects);
+        } catch (IOException e) {
+            throw new ProjectFileException(e.getMessage());
+        }
+
         GanttChartController.onProjectListChanged();
+        System.out.println("Wrote " + existingProjects.size() + " items.");
+        return existingProjects.size();
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Project> loadProjects() throws ProjectFileException {
-        File file = new File(FILE_PATH);
-        if (!file.exists() || file.length() == 0) {
-            return new ArrayList<>();
-        }
+    private List<Project> load() throws ProjectFileException {
 
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
-            return (List<Project>) in.readObject(); // will always be a list
-        } catch (IOException | ClassNotFoundException e) {
+        List<Project> returnList = null;
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(projectFile));
+            returnList = (List<Project>) in.readObject();
+        } catch (IOException e) {
+          // No files was found. Create a fresh arraylist.
+            returnList = new ArrayList<>();
+        } catch (ClassNotFoundException e) {
             throw new ProjectFileException(e.getMessage());
         }
+        System.out.println("Read " + returnList.size() + " items from file.");
+        existingProjects = returnList;
+        return returnList;
     }
 
-    public static void printProjects(List<Project> existingProjects) {
+    public List<Project> get() {
+        try {
+            load();
+        } catch (ProjectFileException e) {
+            // This should be unreachable code unless somebody deletes the project file while we're using it.
+            throw new RuntimeException(e);
+        }
+        return existingProjects;
+    }
+
+    public void printProjects() {
         System.out.println(existingProjects);//TODO print out names of each project iteratively
 
         for (Project project : existingProjects) {
@@ -46,6 +76,15 @@ public class ProjectManager {
             System.out.println(project.getStartDate());
         }
     }
+
+    public void addProject(Project p) {
+        existingProjects.add(p);
+    }
+
+    public void removeProject(Project p) {
+        existingProjects.remove(p);
+    }
+
     //TODO delete projects
     /*public static void deleteProjects(List<Project> existingProjects) {
         for (Project project : existingProjects) {}

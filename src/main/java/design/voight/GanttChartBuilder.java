@@ -18,13 +18,15 @@ public class GanttChartBuilder {
     private static final String[] monthNames = {"January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
     private GridPane calendarGrid;
+    private ProjectManager projectManager;
 
     /**
      * Pass a GridPane where chart should be made when creating GanttChart
      * @param calendarGrid The GridPane
      */
-    public GanttChartBuilder(GridPane calendarGrid) {
+    public GanttChartBuilder(GridPane calendarGrid, ProjectManager projectManager) {
         this.calendarGrid = calendarGrid;
+        this.projectManager = projectManager;
     }
 
     /**
@@ -33,8 +35,9 @@ public class GanttChartBuilder {
      * Project objects will need: String name, LocalDate startDate, LocalDate endDate
      * @param projects is a List of projects with the above variables.
      */
-    public void addProjects(List<Project> projects) {
-
+    public void addProjects() {
+        List<Project> projects = projectManager.get();
+        System.out.println("Adding " + projects.size() + " items to GanttChart.");
         for (Project project : projects) {
             int startDayIndex = convertDateToDayIndex(project.getStartDate());
             int endDayIndex = convertDateToDayIndex(project.getEndDate());
@@ -76,7 +79,7 @@ public class GanttChartBuilder {
                 //calendarGrid.add(new Text(""), col, row); for non-visible rows
             }
         }
-        addProjects(ProjectManager.loadProjects());// Link project list
+        addProjects();// Link project list
     }
 
     public void refreshChart() {

@@ -14,7 +14,7 @@ public class ProjectPopupController {
 
     private Stage stage;
     private String name;
-
+    private ProjectManager pm;
 
     @FXML
     private TextArea descriptionField;
@@ -39,32 +39,24 @@ public class ProjectPopupController {
 
     @FXML
     private void onConfirm() {
-        name = nameField.getText();
-        LocalDate startDate = startDateField.getValue();
-        LocalDate endDate = endDateField.getValue();
-        String description = descriptionField.getText();
-
-        // Create the Project object
         try {
+            name = nameField.getText();
+            LocalDate startDate = startDateField.getValue();
+            LocalDate endDate = endDateField.getValue();
+            String description = descriptionField.getText();
+
+            // Create the Project object
             Project theProject = new Project(name, startDate, endDate, description);
             // Close the stage (popup)
             stage.close();
 
             // Create a mutable list and add the project
-            List<Project> projectsToSave = new ArrayList<>();
-            projectsToSave.add(theProject);
+            pm.addProject(theProject);
 
-            // Save the project in a background thread
-            new Thread(() -> {
-                // Pass the mutable list to save
-                try {
-                    ProjectManager.save(projectsToSave);
-                } catch (ProjectFileException e) {
-                    // TODO: Replace this with UI dialog.
-                    System.err.println("The loaded file did not contain Projects or could not be found.");
-                }
-            }).start();
-        } catch (ProjectException e) {
+            // Pass the mutable list to save
+            pm.save();
+
+        } catch (ProjectException | ProjectFileException e) {
             // TODO: Replace this with UI dialog.
             System.err.println("There was a problem with your project: " + e.getMessage());
         }
@@ -73,6 +65,10 @@ public class ProjectPopupController {
     @FXML
     private void onCancel() {
         stage.close();
+    }
+
+    public void setProgramManager(ProjectManager pm) {
+        this.pm = pm;
     }
 }
 

@@ -8,9 +8,11 @@ public class GanttChartController {
 
     @FXML private GridPane calendarGrid;  // GridPane from FXML
     private static GanttChartBuilder gcBuilder;
+    private ProjectManager pm;
 
     public void initialize() throws ProjectFileException {//TODO call not needed most likely, remove test project, use maven to test.
-        gcBuilder = new GanttChartBuilder(calendarGrid);
+        pm=new ProjectManager();
+        gcBuilder = new GanttChartBuilder(calendarGrid, pm);
         gcBuilder.generateCalendarGrid();
     }
 
